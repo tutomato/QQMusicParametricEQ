@@ -1,5 +1,5 @@
 #ifndef AppVersion
-#define AppVersion "0.1.0-preview.1"
+#define AppVersion "0.1.1-preview.1"
 #endif
 #ifndef ProjectDir
 #error ProjectDir is required

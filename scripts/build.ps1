@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$ZigCompiler='zig',[string]$InnoCompiler,[ValidatePattern('^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$')][string]$Version='0.1.0-preview.1')
+param([string]$ZigCompiler='zig',[string]$InnoCompiler,[ValidatePattern('^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$')][string]$Version='0.1.1-preview.1')
 $ErrorActionPreference='Stop'
 $repo=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $dist=Join-Path $repo 'dist'
@@ -8,7 +8,11 @@ New-Item -ItemType Directory -Force -Path $dist | Out-Null
 if($LASTEXITCODE -ne 0){throw 'DSP test build failed'}
 & (Join-Path $dist 'test_dsp.exe')
 if($LASTEXITCODE -ne 0){throw 'DSP tests failed'}
-& $ZigCompiler cc -target x86-windows-gnu -shared -O2 -s -DUNICODE -D_UNICODE (Join-Path $repo 'src\plugin.c') -o (Join-Path $dist 'dsp_qqparametric.dll') -luser32 -lgdi32 -lshell32 -lcomctl32
+& $ZigCompiler cc -target x86-windows-gnu -O2 (Join-Path $repo 'tests\test_guard.c') (Join-Path $repo 'src\output_guard.c') -o (Join-Path $dist 'test_guard.exe') -luser32
+if($LASTEXITCODE -ne 0){throw 'Guard test build failed'}
+& (Join-Path $dist 'test_guard.exe')
+if($LASTEXITCODE -ne 0){throw 'Guard tests failed'}
+& $ZigCompiler cc -target x86-windows-gnu -shared -O2 -s -DUNICODE -D_UNICODE (Join-Path $repo 'src\plugin.c') (Join-Path $repo 'src\output_guard.c') -o (Join-Path $dist 'dsp_qqparametric.dll') -luser32 -lgdi32 -lshell32 -lcomctl32
 if($LASTEXITCODE -ne 0){throw 'Plugin build failed'}
 if($InnoCompiler){
  & $InnoCompiler /Q "/DAppVersion=$Version" "/DProjectDir=$repo" (Join-Path $repo 'installer\setup.iss')
