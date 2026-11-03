@@ -4,6 +4,8 @@
 
 独占输出由 QQ 音乐原生提供，本插件负责参数 EQ。两者可以一起使用。
 
+[下载安装包](https://github.com/tutomato/QQMusicParametricEQ/releases/tag/v0.1.0-preview.1) · [全部发布](https://github.com/tutomato/QQMusicParametricEQ/releases) · [反馈问题](https://github.com/tutomato/QQMusicParametricEQ/issues)
+
 ## 安装与启用
 
 1. 退出 QQ 音乐，运行 `QQMusicParametricEQ-…-windows-x86-setup.exe`。
